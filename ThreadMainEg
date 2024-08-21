@@ -1,0 +1,32 @@
+package com.thread.examples;
+
+class ThreadA extends Thread {
+	public void run(){
+		System.out.println("run start ");
+		for(int i=1;i<=10;i++) {
+			System.out.println("i is "+i);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+public class ThreadMainEg {
+
+	public static void main(String[] args) {
+		System.out.println("main start ");
+		ThreadA ta=new ThreadA();
+		ta.start();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("main ends");
+	}
+
+}
