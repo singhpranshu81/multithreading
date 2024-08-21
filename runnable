@@ -1,0 +1,33 @@
+package com.thread.examples;
+
+class ThreadB implements Runnable {
+	public void run(){
+		System.out.println("run start ");
+		for(int i=1;i<=10;i++) {
+			System.out.println("i is "+i);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+public class UsingRunnable {
+
+	public static void main(String[] args) {
+		System.out.println("main start ");
+		ThreadB ta=new ThreadB();
+		Thread t =new Thread(ta); // to make the run to execute pass the method object in thread reference
+		t.start();      // .start() is available in thread class
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("main ends");
+	}
+
+}
