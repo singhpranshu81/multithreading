@@ -1,0 +1,136 @@
+package com.mlth.third;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+
+class F {
+	int[] arr = new int[5];
+
+	public int[] gr() {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("file1.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		String Int_line;
+		int i = 0, z = 0;
+		try {
+			while ((Int_line = reader.readLine()) != null) {
+				int In_Value = Integer.parseInt(Int_line);
+				// Print the Integer
+				arr[i++] = In_Value;
+				System.out.println(Arrays.toString(arr));
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arr;
+	}
+}
+
+class Logic extends F {
+	int num, i = 0;
+	boolean available;
+	 int[] ar = gr();
+
+	public synchronized void getNumber() {
+
+		if (available)
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		this.num = ar[i++];
+		System.out.println("num " + this.num);
+
+		System.out.println(Thread.currentThread().getName() + " reads " + num);
+		available = true;
+		notify();
+		// return num;
+	}
+
+	public synchronized void getFact() {
+		if (!available)
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		int result = 1;
+		int p = num;
+		if (p > 1) {
+			for (int i = 1; i <= p; i++) {
+				result = result * i;
+			}
+		}
+		System.out.println(Thread.currentThread().getName() + " factorial is " + result);
+		available = false;
+		notify();
+		// return result;
+	}
+
+}
+
+class Thread1 implements Runnable {
+	Logic l;
+
+	public Thread1(Logic l) {
+		this.l = l;
+		new Thread(this, "reader").start();
+	}
+
+	@Override
+	public void run() {
+
+		int x = 0;
+		while (x < 5) {
+			l.getNumber();
+			x++;
+		}
+
+	}
+
+}
+
+class Thread2 implements Runnable {
+	Logic l;
+
+	public Thread2(Logic l) {
+		this.l = l;
+		new Thread(this, "ans: ").start();
+	}
+
+	@Override
+	public void run() {
+		int x = 0;
+		while (x < 5) {
+			l.getFact();
+			x++;
+		}
+
+	}
+
+}
+
+public class Third {
+
+	public static void main(String[] args) {
+		Logic l = new Logic();
+		new Thread1(l);
+		new Thread2(l);
+	}
+
+}
