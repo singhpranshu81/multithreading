@@ -1,0 +1,64 @@
+package com.mlth.first;
+
+class ThreadA extends Thread {
+	
+	public   synchronized void fun() {
+		//System.out.println("Thread started");
+		//System.out.println("Thread id:"+Thread.currentThread());
+		//System.out.println("Thread PRIORITY:"+Thread.currentThread().getPriority());
+		//System.out.println("Threead is alive:"+Thread.currentThread().isAlive());
+		//System.out.println("Thread is daemon:"+Thread.currentThread().isDaemon());
+		
+		for(int i=1;i<=10;i++) {
+			System.out.println(i);
+			//System.out.println("Threead is alive:"+Thread.currentThread().isAlive());
+		//	Thread.currentThread().interrupt();
+		//	System.out.println("Thread is interrupted:"+Thread.currentThread());
+			
+			//System.out.println("i"+i);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		//System.out.println("Thread ends");
+	}
+	
+}
+    
+ 
+class ThreadB extends Thread{
+	ThreadA ta1;
+	public ThreadB(ThreadA ta1)
+	{
+		this.ta1=ta1;
+	}
+	public void run()
+	{
+		ta1.fun();
+	}
+}
+
+public class Second {
+ 
+	
+	public static void main(String[]args)
+	{
+		//System.out.println("Main starts");
+		ThreadA t=new ThreadA();
+		//t.start();
+		//Thread ta=new Thread(t);
+		//ta.start();
+		ThreadB tb1=new ThreadB(t);
+		ThreadB tb2=new ThreadB(t);
+		ThreadB tb3=new ThreadB(t);
+		tb1.start();
+		tb2.start();
+		tb3.start();
+		
+		//System.out.println("Main ends");
+		
+	}
+}
